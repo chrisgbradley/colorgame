@@ -6,24 +6,30 @@
     <title>Color Game</title>
 
     <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css?family=Pangolin|Raleway" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
+
 </head>
 
 <body>
-    <div class="dc-section dc-section-primary">
+    <div class="dc-section dc-section-primary padding-remove-bottom">
         <div class="dc-container center center-content">
             <div id="board" class="masthead">
                 <h2>The Color<br /><span id="colorCode"></span><br />Training Game</h2>
             </div>
-            <div id="controls" class="nav">
-                <ul id="difficulty-list">
-                    <li class="selected">
+            <div id="controls" class="navbar">
+                <a id="reset" class="navitem left">New Colors</a>
+                <p id="message">
+
+                </p>
+                <ul id="difficulty-list" class="navbar right">
+                    <li class="navitem selected">
                         easy
                     </li>
-                    <li>
+                    <li class="navitem">
                         medium
                     </li>
-                    <li>
+                    <li class="navitem">
                         hard
                     </li>
                 </ul>

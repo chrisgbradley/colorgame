@@ -1,13 +1,14 @@
 var game = {
     el: document.getElementById("game"),
     color: document.getElementById("colorCode"),
+    tiles: document.querySelectorAll("#game .dc-grid-item"),
     difficulty: findWithClass("selected", document.getElementById("difficulty-list").children),
     setDifficulty: function(difficulty) {
         var game = this.el;
         clearGame();
         /* a is the length of the desired array*/
-        var a = difficulty+2;
-        for(var i = 0; i < a; i++) {
+        var a = difficulty + 2;
+        for (var i = 0; i < a; i++) {
             createRow(a);
         };
 
@@ -18,9 +19,9 @@ var game = {
 
 
             //append items to row
-            for(var j = 0; j < items; j++) {
+            for (var j = 0; j < items; j++) {
                 var subNode = document.createElement("div");
-                subNode.classList.add("dc-grid-item", "square-1-"+items);
+                subNode.classList.add("dc-grid-item", "square-1-" + items);
                 node.appendChild(subNode);
             }
             //append row to game
@@ -32,29 +33,42 @@ var game = {
                 game.removeChild(game.lastChild);
             };
         };
+
+        this.updateGame();
     },
-    initListeners: function() {
+    initButtonListeners: function() {
         var e;
 
-        e = document.querySelectorAll("ul li");
-        for(var i = 0; i < e.length; i++){
+        e = document.querySelectorAll("#difficulty-list li");
+        for (var i = 0; i < e.length; i++) {
             e[i].addEventListener("click", function() {
-                for(var j = 0; j < e.length; j++) {
+                for (var j = 0; j < e.length; j++) {
                     e[j].classList.remove("selected");
                 };
                 this.classList.add("selected");
-                for(var j = 0; j < e.length; j++) {
-                    if(e[j] === this) {
+                for (var j = 0; j < e.length; j++) {
+                    if (e[j] === this) {
                         game.setDifficulty(j);
+                        game.newGame();
                     };
                 };
             });
         };
     },
+    initTileListeners: function() {
+        for(var i = 0; i < this.tiles.length; i++) {
+            this.tiles[i].addEventListener("click", function() {
+                if(this.style.backgroundColor === game.color.textContent) {
+                    game.gameWon();
+                } else {
+                    this.classList.add("hidden");
+                }
+            });
+        }
+    },
     newColors: function() {
-        var tiles = document.querySelectorAll("#game .dc-grid-item");
-        for(var i = 0; i < tiles.length; i++) {
-            tiles[i].style.backgroundColor = rgbCode();
+        for (var i = 0; i < this.tiles.length; i++) {
+            this.tiles[i].style.backgroundColor = rgbCode();
         };
 
         function rgbCode() {
@@ -65,9 +79,24 @@ var game = {
         };
     },
     setColor: function() {
-        var tiles = document.querySelectorAll("#game .dc-grid-item");
-        var r = Math.floor(Math.random() * tiles.length);
-        this.color.textContent = tiles[r].style.backgroundColor;
+        var r = Math.floor(Math.random() * this.tiles.length);
+        this.color.textContent = this.tiles[r].style.backgroundColor;
+    },
+    gameWon: function() {
+        for(var i = 0; i < this.tiles.length; i++) {
+            this.tiles[i].classList.remove("hidden");
+            this.tiles[i].style.backgroundColor = game.color.textContent;
+            document.getElementById("top")
+        };
+    },
+    newGame: function() {
+        this.newColors();
+        this.setColor();
+    },
+    updateGame: function() {
+        this.color = document.getElementById("colorCode");
+        this.tiles = document.querySelectorAll("#game .dc-grid-item");
+        this.initTileListeners();
     }
 };
 
@@ -76,7 +105,9 @@ var game = {
 
 window.onload = function() {
     game.setDifficulty(game.difficulty);
-    game.initListeners();
+    game.initButtonListeners();
+    game.initTileListeners();
+    game.newGame();
 }
 
 
